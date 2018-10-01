@@ -31,6 +31,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -54,6 +55,7 @@ public class RecyclerTabLayout extends RecyclerView {
     protected int mTabPaddingEnd;
     protected int mTabPaddingBottom;
     protected int mIndicatorHeight;
+    private int mIndicatorHeightBck;
 
     protected LinearLayoutManager mLinearLayoutManager;
     protected RecyclerOnScrollListener mRecyclerOnScrollListener;
@@ -100,8 +102,9 @@ public class RecyclerTabLayout extends RecyclerView {
                 defStyle, R.style.rtl_RecyclerTabLayout);
         setIndicatorColor(a.getColor(R.styleable
                 .rtl_RecyclerTabLayout_rtl_tabIndicatorColor, 0));
-        setIndicatorHeight(a.getDimensionPixelSize(R.styleable
-                .rtl_RecyclerTabLayout_rtl_tabIndicatorHeight, 0));
+        mIndicatorHeightBck = a.getDimensionPixelSize(R.styleable
+                .rtl_RecyclerTabLayout_rtl_tabIndicatorHeight, 0);
+        setIndicatorHeight(mIndicatorHeightBck);
 
         mTabTextAppearance = a.getResourceId(R.styleable.rtl_RecyclerTabLayout_rtl_tabTextAppearance,
                 R.style.rtl_RecyclerTabLayout_Tab);
@@ -147,6 +150,15 @@ public class RecyclerTabLayout extends RecyclerView {
         super.onDetachedFromWindow();
     }
 
+    public void setEditMode(boolean editMode) {
+        if (editMode) {
+            setIndicatorHeight(0);  //hide indicator in edit mode
+        } else {
+            setIndicatorHeight(mIndicatorHeightBck);    //restore indicator
+        }
+
+        mAdapter.setEditMode(editMode);
+    }
 
     public void setIndicatorColor(int color) {
         mIndicatorPaint.setColor(color);
@@ -451,6 +463,7 @@ public class RecyclerTabLayout extends RecyclerView {
 
         protected ViewPager mViewPager;
         protected int mIndicatorPosition;
+        private boolean mIsEditMode;
 
         public Adapter(ViewPager viewPager) {
             mViewPager = viewPager;
@@ -466,6 +479,14 @@ public class RecyclerTabLayout extends RecyclerView {
 
         public int getCurrentIndicatorPosition() {
             return mIndicatorPosition;
+        }
+
+        public void setEditMode(boolean isEditMode) {
+            mIsEditMode = isEditMode;
+        }
+
+        public boolean isEditMode() {
+            return mIsEditMode;
         }
     }
 

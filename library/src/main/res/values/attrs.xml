@@ -21,5 +21,7 @@
 
         <attr name="rtl_scrollEnabled" format="boolean"/>
 
+        <attr name="state_edit_mode" format="boolean"/>
+
     </declare-styleable>
 </resources>
