@@ -22,6 +22,7 @@ import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.support.v4.text.TextUtilsCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.content.res.AppCompatResources;
@@ -34,7 +35,10 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.TextView;
+
+import java.util.Locale;
 
 public class RecyclerTabLayout extends RecyclerView {
 
@@ -97,6 +101,17 @@ public class RecyclerTabLayout extends RecyclerView {
         setLayoutManager(mLinearLayoutManager);
         setItemAnimator(null);
         mPositionThreshold = DEFAULT_POSITION_THRESHOLD;
+
+        getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                RecyclerTabLayout.this.getViewTreeObserver().removeOnPreDrawListener(this);
+                if (isLayoutRtl()) {
+                    mViewPager.setRotationY(VIEWPAGER_Y_ROTATION);
+                }
+                return true;
+            }
+        });
     }
 
     private void getAttributes(Context context, AttributeSet attrs, int defStyle) {
@@ -144,21 +159,6 @@ public class RecyclerTabLayout extends RecyclerView {
         mFadeOnlyEnd = a.getBoolean(R.styleable.rtl_RecyclerTabLayout_rtl_fadeOnlyEnd, false);
 
         a.recycle();
-    }
-
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-
-        post(new Runnable() {
-            @Override
-            public void run() {
-                if (isLayoutRtl()) {
-                    //rotate view pager in order to change swipe direction to support rtl
-                    mViewPager.setRotationY(VIEWPAGER_Y_ROTATION);
-                }
-            }
-        });
     }
 
     @Override
