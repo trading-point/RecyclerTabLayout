@@ -41,6 +41,7 @@ public class RecyclerTabLayout extends RecyclerView {
     protected static final long DEFAULT_SCROLL_DURATION = 200;
     protected static final float DEFAULT_POSITION_THRESHOLD = 0.6f;
     protected static final float POSITION_THRESHOLD_ALLOWABLE = 0.001f;
+    protected static final float VIEWPAGER_Y_ROTATION = 180f;
 
     protected Paint mIndicatorPaint;
     protected int mTabBackgroundResId;
@@ -201,6 +202,12 @@ public class RecyclerTabLayout extends RecyclerView {
         if (mViewPager.getAdapter() == null) {
             throw new IllegalArgumentException("ViewPager does not have a PagerAdapter set");
         }
+
+        if (isLayoutRtl()) {
+            //rotate view pager in order to change swipe direction to support rtl
+            mViewPager.setRotationY(VIEWPAGER_Y_ROTATION);
+        }
+
         mViewPager.addOnPageChangeListener(new ViewPagerOnPageChangeListener(this));
         setAdapter(adapter);
         scrollToTab(mViewPager.getCurrentItem());
