@@ -143,6 +143,21 @@ public class RecyclerTabLayout extends RecyclerView {
     }
 
     @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+
+        post(new Runnable() {
+            @Override
+            public void run() {
+                if (isLayoutRtl()) {
+                    //rotate view pager in order to change swipe direction to support rtl
+                    mViewPager.setRotationY(VIEWPAGER_Y_ROTATION);
+                }
+            }
+        });
+    }
+
+    @Override
     protected void onDetachedFromWindow() {
         if (mRecyclerOnScrollListener != null) {
             removeOnScrollListener(mRecyclerOnScrollListener);
@@ -201,11 +216,6 @@ public class RecyclerTabLayout extends RecyclerView {
         mViewPager = adapter.getViewPager();
         if (mViewPager.getAdapter() == null) {
             throw new IllegalArgumentException("ViewPager does not have a PagerAdapter set");
-        }
-
-        if (isLayoutRtl()) {
-            //rotate view pager in order to change swipe direction to support rtl
-            mViewPager.setRotationY(VIEWPAGER_Y_ROTATION);
         }
 
         mViewPager.addOnPageChangeListener(new ViewPagerOnPageChangeListener(this));
