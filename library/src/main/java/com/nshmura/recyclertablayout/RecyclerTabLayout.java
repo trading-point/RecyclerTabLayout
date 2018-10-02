@@ -72,6 +72,7 @@ public class RecyclerTabLayout extends RecyclerView {
     protected float mPositionThreshold;
     protected boolean mRequestScrollToTab;
     protected boolean mScrollEanbled;
+    protected boolean mFadeOnlyEnd;
 
     public RecyclerTabLayout(Context context) {
         this(context, null);
@@ -139,6 +140,9 @@ public class RecyclerTabLayout extends RecyclerView {
         mTabBackgroundResId = a
                 .getResourceId(R.styleable.rtl_RecyclerTabLayout_rtl_tabBackground, 0);
         mScrollEanbled = a.getBoolean(R.styleable.rtl_RecyclerTabLayout_rtl_scrollEnabled, true);
+
+        mFadeOnlyEnd = a.getBoolean(R.styleable.rtl_RecyclerTabLayout_rtl_fadeOnlyEnd, false);
+
         a.recycle();
     }
 
@@ -164,6 +168,24 @@ public class RecyclerTabLayout extends RecyclerView {
             mRecyclerOnScrollListener = null;
         }
         super.onDetachedFromWindow();
+    }
+
+    @Override
+    protected float getRightFadingEdgeStrength() {
+        if (mFadeOnlyEnd) {
+            //apply fading if layout is ltr
+            return isLayoutRtl() ? 0 : super.getRightFadingEdgeStrength();
+        }
+        return super.getRightFadingEdgeStrength();
+    }
+
+    @Override
+    protected float getLeftFadingEdgeStrength() {
+        if (mFadeOnlyEnd) {
+            //apply fading if layout is rtl
+            return isLayoutRtl() ? super.getLeftFadingEdgeStrength() : 0;
+        }
+        return super.getLeftFadingEdgeStrength();
     }
 
     public void setEditMode(boolean editMode) {
