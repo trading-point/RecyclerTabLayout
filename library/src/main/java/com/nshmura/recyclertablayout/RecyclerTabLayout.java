@@ -101,17 +101,6 @@ public class RecyclerTabLayout extends RecyclerView {
         setLayoutManager(mLinearLayoutManager);
         setItemAnimator(null);
         mPositionThreshold = DEFAULT_POSITION_THRESHOLD;
-
-        getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                RecyclerTabLayout.this.getViewTreeObserver().removeOnPreDrawListener(this);
-                if (isLayoutRtl()) {
-                    mViewPager.setRotationY(VIEWPAGER_Y_ROTATION);
-                }
-                return true;
-            }
-        });
     }
 
     private void getAttributes(Context context, AttributeSet attrs, int defStyle) {
