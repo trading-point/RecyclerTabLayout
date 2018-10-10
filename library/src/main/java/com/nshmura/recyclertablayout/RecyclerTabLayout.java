@@ -185,6 +185,8 @@ public class RecyclerTabLayout extends RecyclerView {
         }
 
         mAdapter.setEditMode(editMode);
+
+        scrollToTab(mViewPager.getCurrentItem());
     }
 
     public void setIndicatorColor(int color) {
