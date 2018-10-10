@@ -22,7 +22,6 @@ import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.support.v4.text.TextUtilsCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.content.res.AppCompatResources;
@@ -32,13 +31,9 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.TextView;
-
-import java.util.Locale;
 
 public class RecyclerTabLayout extends RecyclerView {
 
@@ -225,13 +220,17 @@ public class RecyclerTabLayout extends RecyclerView {
     }
 
     public void setUpWithAdapter(RecyclerTabLayout.Adapter<?> adapter) {
+        setUpWithAdapter(adapter, new ViewPagerOnPageChangeListener(this));
+    }
+
+    public void setUpWithAdapter(RecyclerTabLayout.Adapter<?> adapter, ViewPagerOnPageChangeListener onPageChangeListener) {
         mAdapter = adapter;
         mViewPager = adapter.getViewPager();
         if (mViewPager.getAdapter() == null) {
             throw new IllegalArgumentException("ViewPager does not have a PagerAdapter set");
         }
 
-        mViewPager.addOnPageChangeListener(new ViewPagerOnPageChangeListener(this));
+        mViewPager.addOnPageChangeListener(onPageChangeListener);
         setAdapter(adapter);
         scrollToTab(mViewPager.getCurrentItem());
     }
@@ -454,35 +453,6 @@ public class RecyclerTabLayout extends RecyclerView {
                 if (view.getLeft() <= center) {
                     mRecyclerTabLayout.setCurrentItem(position, false);
                     break;
-                }
-            }
-        }
-    }
-
-    protected static class ViewPagerOnPageChangeListener implements ViewPager.OnPageChangeListener {
-
-        private final RecyclerTabLayout mRecyclerTabLayout;
-        private int mScrollState;
-
-        public ViewPagerOnPageChangeListener(RecyclerTabLayout recyclerTabLayout) {
-            mRecyclerTabLayout = recyclerTabLayout;
-        }
-
-        @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            mRecyclerTabLayout.scrollToTab(position, positionOffset, false);
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int state) {
-            mScrollState = state;
-        }
-
-        @Override
-        public void onPageSelected(int position) {
-            if (mScrollState == ViewPager.SCROLL_STATE_IDLE) {
-                if (mRecyclerTabLayout.mIndicatorPosition != position) {
-                    mRecyclerTabLayout.scrollToTab(position);
                 }
             }
         }
