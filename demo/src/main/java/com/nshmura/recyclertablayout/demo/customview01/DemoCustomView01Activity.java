@@ -1,6 +1,7 @@
 package com.nshmura.recyclertablayout.demo.customview01;
 
 import com.nshmura.recyclertablayout.RecyclerTabLayout;
+import com.nshmura.recyclertablayout.ViewPagerOnPageChangeListener;
 import com.nshmura.recyclertablayout.demo.ColorItem;
 import com.nshmura.recyclertablayout.demo.Demo;
 import com.nshmura.recyclertablayout.demo.DemoColorPagerAdapter;

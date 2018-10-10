@@ -220,17 +220,19 @@ public class RecyclerTabLayout extends RecyclerView {
     }
 
     public void setUpWithAdapter(RecyclerTabLayout.Adapter<?> adapter) {
-        setUpWithAdapter(adapter, new ViewPagerOnPageChangeListener(this));
+        setUpWithAdapter(adapter, true);
     }
 
-    public void setUpWithAdapter(RecyclerTabLayout.Adapter<?> adapter, ViewPagerOnPageChangeListener onPageChangeListener) {
+    public void setUpWithAdapter(RecyclerTabLayout.Adapter<?> adapter, boolean overrideViewPagerListener) {
         mAdapter = adapter;
         mViewPager = adapter.getViewPager();
         if (mViewPager.getAdapter() == null) {
             throw new IllegalArgumentException("ViewPager does not have a PagerAdapter set");
         }
 
-        mViewPager.addOnPageChangeListener(onPageChangeListener);
+        if (overrideViewPagerListener) {
+            mViewPager.addOnPageChangeListener(new ViewPagerOnPageChangeListener(this));
+        }
         setAdapter(adapter);
         scrollToTab(mViewPager.getCurrentItem());
     }
