@@ -40,7 +40,6 @@ public class RecyclerTabLayout extends RecyclerView {
     protected static final long DEFAULT_SCROLL_DURATION = 200;
     protected static final float DEFAULT_POSITION_THRESHOLD = 0.6f;
     protected static final float POSITION_THRESHOLD_ALLOWABLE = 0.001f;
-    protected static final float VIEWPAGER_Y_ROTATION = 180f;
 
     protected Paint mIndicatorPaint;
     protected int mTabBackgroundResId;
@@ -300,7 +299,7 @@ public class RecyclerTabLayout extends RecyclerView {
                 if (position == 0) {
                     float indicatorGap = (nextView.getMeasuredWidth() - selectedView.getMeasuredWidth()) / 2;
                     mIndicatorGap = (int) (indicatorGap * positionOffset);
-                    mIndicatorScroll = (int)((selectedView.getMeasuredWidth() + indicatorGap)  * positionOffset);
+                    mIndicatorScroll = (int) ((selectedView.getMeasuredWidth() + indicatorGap) * positionOffset);
 
                 } else {
                     float indicatorGap = (nextView.getMeasuredWidth() - selectedView.getMeasuredWidth()) / 2;
@@ -455,6 +454,35 @@ public class RecyclerTabLayout extends RecyclerView {
         }
     }
 
+    protected static class ViewPagerOnPageChangeListener implements ViewPager.OnPageChangeListener {
+
+        private final RecyclerTabLayout mRecyclerTabLayout;
+        private int mScrollState;
+
+        public ViewPagerOnPageChangeListener(RecyclerTabLayout recyclerTabLayout) {
+            mRecyclerTabLayout = recyclerTabLayout;
+        }
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            mRecyclerTabLayout.scrollToTab(position, positionOffset, false);
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+            mScrollState = state;
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            if (mScrollState == ViewPager.SCROLL_STATE_IDLE) {
+                if (mRecyclerTabLayout.mIndicatorPosition != position) {
+                    mRecyclerTabLayout.scrollToTab(position);
+                }
+            }
+        }
+    }
+
     public static abstract class Adapter<T extends RecyclerView.ViewHolder>
             extends RecyclerView.Adapter<T> {
 
@@ -480,10 +508,6 @@ public class RecyclerTabLayout extends RecyclerView {
 
         public void setEditMode(boolean isEditMode) {
             mIsEditMode = isEditMode;
-        }
-
-        public boolean isEditMode() {
-            return mIsEditMode;
         }
     }
 
