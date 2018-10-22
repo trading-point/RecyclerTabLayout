@@ -172,11 +172,11 @@ public class RecyclerTabLayout extends RecyclerView {
     }
 
     public void setEditMode(boolean editMode) {
-        if (editMode) {
-            setIndicatorHeight(0);  //hide indicator in edit mode
-        } else {
-            setIndicatorHeight(mIndicatorHeightBck);    //restore indicator
+        if (mAdapter == null || mViewPager == null) {
+            return;
         }
+
+        setIndicatorHeight(editMode ? 0 : mIndicatorHeightBck);
 
         mAdapter.setEditMode(editMode);
 
