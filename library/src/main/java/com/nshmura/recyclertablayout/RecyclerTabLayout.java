@@ -176,6 +176,7 @@ public class RecyclerTabLayout extends RecyclerView {
             return;
         }
 
+        //hide/show tab indicator
         setIndicatorHeight(editMode ? 0 : mIndicatorHeightBck);
 
         mAdapter.setEditMode(editMode);
