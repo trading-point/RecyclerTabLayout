@@ -95,7 +95,7 @@ public class RecyclerTabLayout extends RecyclerView {
         };
         mLinearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         setLayoutManager(mLinearLayoutManager);
-        setItemAnimator(null);
+        //setItemAnimator(null);
         mPositionThreshold = DEFAULT_POSITION_THRESHOLD;
     }
 
