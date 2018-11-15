@@ -22,12 +22,14 @@ import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -182,6 +184,10 @@ public class RecyclerTabLayout extends RecyclerView {
         mAdapter.setEditMode(editMode);
 
         scrollToPosition(mViewPager.getCurrentItem());
+    }
+
+    public void setItemTouchHelper(@NonNull ItemTouchHelper itemTouchHelper) {
+        itemTouchHelper.attachToRecyclerView(this);
     }
 
     public void setIndicatorColor(int color) {
