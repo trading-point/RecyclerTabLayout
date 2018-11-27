@@ -183,11 +183,9 @@ public class RecyclerTabLayout extends RecyclerView {
 
         mAdapter.setEditMode(editMode);
 
-        scrollToPosition(mViewPager.getCurrentItem());
-    }
+        invalidate();
 
-    public void setItemTouchHelper(@NonNull ItemTouchHelper itemTouchHelper) {
-        itemTouchHelper.attachToRecyclerView(this);
+        smoothScrollToPosition(mViewPager.getCurrentItem());
     }
 
     public void setIndicatorColor(int color) {
@@ -282,8 +280,10 @@ public class RecyclerTabLayout extends RecyclerView {
 
     protected void scrollToTab(int position) {
         scrollToTab(position, 0, false);
+
+        mAdapter.notifyItemChanged(mAdapter.getCurrentIndicatorPosition());
         mAdapter.setCurrentIndicatorPosition(position);
-        mAdapter.notifyDataSetChanged();
+        mAdapter.notifyItemChanged(position);
     }
 
     protected void scrollToTab(int position, float positionOffset, boolean fitIndicator) {
