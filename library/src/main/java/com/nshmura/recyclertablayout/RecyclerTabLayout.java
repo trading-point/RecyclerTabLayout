@@ -181,9 +181,7 @@ public class RecyclerTabLayout extends RecyclerView {
         //hide/show tab indicator
         setIndicatorHeight(editMode ? 0 : mIndicatorHeightBck);
 
-        mAdapter.setEditMode(editMode);
-
-        invalidate();
+        mAdapter.notifyDataSetChanged();
 
         smoothScrollToPosition(mViewPager.getCurrentItem());
     }
@@ -280,10 +278,9 @@ public class RecyclerTabLayout extends RecyclerView {
 
     protected void scrollToTab(int position) {
         scrollToTab(position, 0, false);
-
-        mAdapter.notifyItemChanged(mAdapter.getCurrentIndicatorPosition());
         mAdapter.setCurrentIndicatorPosition(position);
-        mAdapter.notifyItemChanged(position);
+        mAdapter.notifyDataSetChanged();
+        mAdapter.notifyDataSetChanged();
     }
 
     protected void scrollToTab(int position, float positionOffset, boolean fitIndicator) {
@@ -495,7 +492,6 @@ public class RecyclerTabLayout extends RecyclerView {
 
         protected ViewPager mViewPager;
         protected int mIndicatorPosition;
-        private boolean mIsEditMode;
 
         public Adapter(ViewPager viewPager) {
             mViewPager = viewPager;
@@ -511,10 +507,6 @@ public class RecyclerTabLayout extends RecyclerView {
 
         public int getCurrentIndicatorPosition() {
             return mIndicatorPosition;
-        }
-
-        public void setEditMode(boolean isEditMode) {
-            mIsEditMode = isEditMode;
         }
     }
 
