@@ -183,7 +183,11 @@ public class RecyclerTabLayout extends RecyclerView {
 
         mAdapter.notifyDataSetChanged();
 
-        smoothScrollToPosition(mViewPager.getCurrentItem());
+        startAnimation(mViewPager.getCurrentItem());
+    }
+
+    public void smoothScrollToTab(int position) {
+        startAnimation(position);
     }
 
     public void setIndicatorColor(int color) {
